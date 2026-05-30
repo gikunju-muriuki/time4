@@ -1,0 +1,17 @@
+{
+  "name": "time4",
+  "short_name": "time4",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#88D3CE",
+  "theme_color": "#1E3A5F",
+  "description": "The ultimate stable countdown and event tracking engine.",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/jjQ8qs3W/transparent-image.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
