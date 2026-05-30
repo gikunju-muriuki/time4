@@ -1,0 +1,224 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// 1. Define your structured database events directly in the Astro frontmatter
+const upcomingEvents = [
+  {
+    title: "World Football Championship Final",
+    category: "SPORTS",
+    description: "The ultimate clash for the global title live from the stadium.",
+    targetDate: "2026-07-15T20:00:00Z", // ISO format string
+    image: "https://i.postimg.cc/jjQ8qs3W/transparent-image.png"
+  },
+  {
+    title: "Next-Gen Gaming Expo 2026",
+    category: "GAMING",
+    description: "Unveiling tomorrow's engine tech and immersive virtual hardware.",
+    targetDate: "2026-09-22T09:00:00Z",
+    image: "https://i.postimg.cc/jjQ8qs3W/transparent-image.png"
+  }
+];
+---
+
+<Layout title="Home - Live Event Countdowns">
+  <section class="hero">
+    <h1>Stay Ahead of Time</h1>
+    <p>Track global events, match kickoffs, and major releases with absolute precision.</p>
+    
+    <div class="search-box">
+      <input type="text" placeholder="Search events..." id="eventSearch" />
+    </div>
+  </section>
+
+  <div class="events-grid">
+    {upcomingEvents.map((event) => (
+      <div class="event-card" data-date={event.targetDate}>
+        <div class="card-header">
+          <img src={event.image} alt="" class="card-icon" />
+          <div>
+            <span class="category-badge">{event.category}</span>
+            <h3 class="event-title">{event.title}</h3>
+          </div>
+        </div>
+        <p class="event-description">{event.description}</p>
+        
+        <div class="countdown-display">
+          <div class="time-block">
+            <span class="days numbers">00</span>
+            <span class="label">DAYS</span>
+          </div>
+          <div class="time-block">
+            <span class="hours numbers">00</span>
+            <span class="label">HRS</span>
+          </div>
+          <div class="time-block">
+            <span class="minutes numbers">00</span>
+            <span class="label">MIN</span>
+          </div>
+          <div class="time-block">
+            <span class="seconds numbers">00</span>
+            <span class="label">SEC</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</Layout>
+
+<script>
+  function initializeCountdowns() {
+    const cards = document.querySelectorAll('.event-card');
+    
+    cards.forEach(card => {
+      const targetStr = card.getAttribute('data-date');
+      if (!targetStr) return;
+      
+      const targetTime = new Date(targetStr).getTime();
+      
+      // Grab target elements inside this specific card scope
+      const daysEl = card.querySelector('.days');
+      const hoursEl = card.querySelector('.hours');
+      const minsEl = card.querySelector('.minutes');
+      const secsEl = card.querySelector('.seconds');
+
+      function update() {
+        const now = new Date().getTime();
+        const distance = targetTime - now;
+
+        if (distance < 0) {
+          if (daysEl) daysEl.textContent = "00";
+          if (hoursEl) hoursEl.textContent = "00";
+          if (minsEl) minsEl.textContent = "00";
+          if (secsEl) secsEl.textContent = "00";
+          return;
+        }
+
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (daysEl) daysEl.textContent = d.toString().padStart(2, '0');
+        if (hoursEl) hoursEl.textContent = h.toString().padStart(2, '0');
+        if (minsEl) minsEl.textContent = m.toString().padStart(2, '0');
+        if (secsEl) secsEl.textContent = s.toString().padStart(2, '0');
+      }
+
+      update();
+      setInterval(update, 1000);
+    });
+  }
+
+  // Run on initial script execution
+  initializeCountdowns();
+</script>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 2rem 0 3rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    color: #1E3A5F;
+    margin-bottom: 0.5rem;
+  }
+  .hero p {
+    color: #64748b;
+    font-size: 1.1rem;
+  }
+  .search-box {
+    margin-top: 1.5rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    color: #1E3A5F;
+  }
+  .search-box input:focus {
+    outline: none;
+    border-color: #2D9392;
+  }
+
+  /* Grid Layout */
+  .events-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  @media (min-width: 768px) {
+    .events-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Card Layout styled strictly with your branding colors */
+  .event-card {
+    background: #1E3A5F; /* Brand Deep Navy Blue */
+    color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #88D3CE; /* Brand Mint Accent */
+    border-radius: 50%;
+    padding: 4px;
+    object-fit: contain;
+  }
+  .category-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #88D3CE; /* Brand Mint Text */
+    letter-spacing: 0.05em;
+  }
+  .event-title {
+    font-size: 1.2rem;
+    margin-top: 0.15rem;
+  }
+  .event-description {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  /* Digital Grid Display */
+  .countdown-display {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: rgba(15, 23, 42, 0.4);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 4px solid #2D9392; /* Brand Teal Anchor Line */
+  }
+  .numbers {
+    display: block;
+    font-family: monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .label {
+    font-size: 0.7rem;
+    color: #88D3CE;
+    font-weight: 600;
+  }
+</style>
