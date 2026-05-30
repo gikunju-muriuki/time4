@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Cache Policy">
+    <h1>Cache Policy</h1>
+    <p>To maximize delivery performance and counter high volumes of active traffic, time4 implements a robust, tiered Edge Caching infrastructure[cite: 19, 26].</p>
+    
+    <h2>1. Edge Storage Layer (Cloudflare KV)</h2>
+    <p>Static structured events and configuration models remain strictly cached on global cloud nodes for blocks lasting between 5 to 10 minutes[cite: 20]. This removes unnecessary server computations and ensures zero latency execution[cite: 20, 60].</p>
+
+    <h2>2. Browser & Client Engine Caching</h2>
+    <p>Core platform components (CSS, branding logos, and PWA logic manifests) are preserved instantly via local Service Workers inside your application memory profile to secure reliable execution under restricted network states.</p>
+</Layout>
